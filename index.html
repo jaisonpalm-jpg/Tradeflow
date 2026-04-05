@@ -1,0 +1,120 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TradeFlow Starter</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    body { margin:0; font-family: Arial, sans-serif; background:#f1f5f9; }
+    .app { display:flex; height:100vh; }
+    .sidebar { width:240px; background:#0f172a; color:white; padding:20px; }
+    .sidebar h2 { margin-bottom:20px; }
+    .sidebar button { display:block; width:100%; margin-bottom:10px; padding:10px; background:none; border:none; color:white; text-align:left; cursor:pointer; }
+    .main { flex:1; padding:20px; overflow:auto; }
+    .card { background:white; padding:15px; border-radius:12px; margin-bottom:15px; }
+    .row { display:flex; gap:15px; }
+    .col { flex:1; }
+    .job { padding:10px; border:1px solid #ddd; border-radius:8px; margin-bottom:8px; cursor:pointer; }
+    .status { font-size:12px; padding:4px 8px; border-radius:6px; }
+    .green { background:#dcfce7; }
+    .blue { background:#dbeafe; }
+    .yellow { background:#fef9c3; }
+  </style>
+</head>
+<body>
+<div id="root"></div><script type="text/babel">
+
+const jobs = [
+  { id:1, title:"AC Repair", customer:"Johnson", status:"On Site" },
+  { id:2, title:"Leak Fix", customer:"Baker", status:"En Route" },
+  { id:3, title:"Panel Check", customer:"Dental", status:"Scheduled" }
+];
+
+function Sidebar({setView}) {
+  return (
+    <div className="sidebar">
+      <h2>TradeFlow</h2>
+      <button onClick={()=>setView('dashboard')}>Dashboard</button>
+      <button onClick={()=>setView('dispatch')}>Dispatch</button>
+      <button onClick={()=>setView('customer')}>Customer</button>
+      <button onClick={()=>setView('mobile')}>Tech App</button>
+    </div>
+  );
+}
+
+function Dashboard() {
+  return (
+    <div>
+      <div className="row">
+        <div className="card col">Jobs Today: 12</div>
+        <div className="card col">Revenue: $4,250</div>
+        <div className="card col">Techs: 5</div>
+      </div>
+
+      <div className="card">
+        <h3>Jobs</h3>
+        {jobs.map(j=> (
+          <div className="job" key={j.id}>
+            <strong>{j.title}</strong><br/>
+            {j.customer} <span className={`status ${j.status==='On Site'?'yellow':j.status==='En Route'?'blue':'green'}`}>{j.status}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function Dispatch() {
+  return (
+    <div className="card">
+      <h3>Dispatch Board</h3>
+      <p>Drag & drop coming next</p>
+    </div>
+  );
+}
+
+function Customer() {
+  return (
+    <div className="card">
+      <h3>Customer Profile</h3>
+      <p>Johnson Residence</p>
+      <p>Service history timeline coming</p>
+    </div>
+  );
+}
+
+function Mobile() {
+  return (
+    <div className="card">
+      <h3>Technician App</h3>
+      <p>Today's Jobs</p>
+      {jobs.map(j=> <div key={j.id}>{j.title}</div>)}
+    </div>
+  );
+}
+
+function App() {
+  const [view, setView] = React.useState('dashboard');
+
+  let content;
+  if(view==='dashboard') content = <Dashboard/>;
+  if(view==='dispatch') content = <Dispatch/>;
+  if(view==='customer') content = <Customer/>;
+  if(view==='mobile') content = <Mobile/>;
+
+  return (
+    <div className="app">
+      <Sidebar setView={setView}/>
+      <div className="main">
+        {content}
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+
+</script></body>
+</html>
